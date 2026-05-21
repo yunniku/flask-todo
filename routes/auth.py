@@ -56,10 +56,11 @@ def login():
         if not user or not check_password_hash(user.password, password):
             flash('이메일 또는 비밀번호가 틀렸습니다!', 'danger')
             return redirect(url_for('auth.login'))
-        
+                
         login_user(user)
         flash(f'{user.username}님 환영합니다! 👋', 'success')
-        return redirect(url_for('todos.index'))
+        return redirect(url_for('dashboard.index'))
+            
     
     return render_template('login.html')
 
