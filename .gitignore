@@ -5,3 +5,4 @@ instance/
 *.db
 .env
 credentials.json
+.vscode/
