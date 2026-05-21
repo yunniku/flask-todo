@@ -1,7 +1,5 @@
-/* static/style.css */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
-/* ===== 기본 설정 ===== */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -10,24 +8,29 @@
 
 body {
     font-family: 'Noto Sans KR', sans-serif;
-    background-color: #f5f5f0;
+    background-color: #f0efe9;
     color: #1a1a1a;
     font-size: 15px;
     line-height: 1.6;
 }
 
 /* ===== 네비게이션 ===== */
+.navbar .container {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
 .navbar {
-    background: var(--bs-body-bg);
-    border-bottom: 1px solid rgba(0,0,0,0.08);
-    padding: 0 !important;
-    height: 56px;
+    align-items: center;
+    background: #ffffff;
+    border-bottom: 1px solid #ebebeb;
+    padding: 12px 0 !important;
 }
 
 .navbar-brand {
     font-size: 15px;
-    font-weight: 500;
-    color: var(--bs-body-color) !important;
+    font-weight: 600;
+    color: #1a1a1a !important;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -38,15 +41,14 @@ body {
     font-size: 18px;
 }
 
-/* 유저 아바타 */
 .user-avatar {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background: #EEEDFE;
     color: #3C3489;
-    font-size: 11px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -54,33 +56,45 @@ body {
 
 .navbar-text {
     font-size: 13px;
-    color: var(--bs-secondary-color) !important;
+    color: #888 !important;
 }
 
 .btn-logout {
-    font-size: 13px;
-    color: var(--bs-secondary-color);
+    font-size: 12px;
+    color: #555;
     background: transparent;
-    border: 1px solid rgba(0,0,0,0.12);
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 4px 12px;
+    padding: 5px 12px;
     display: flex;
     align-items: center;
     gap: 5px;
+    text-decoration: none;
 }
 
-.nav-link {
-    font-size: 13px !important;
-    color: #555 !important;
-    padding: 6px 14px !important;
-    border-radius: 8px;
+.btn-logout:hover {
+    background: #f5f5f5;
+    color: #1a1a1a;
+}
+
+/* ===== 구글 캘린더 버튼 ===== */
+.btn-gcal {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #555;
+    background: #fff;
     border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    padding: 6px 14px;
+    text-decoration: none;
     transition: all 0.15s;
 }
 
-.nav-link:hover {
+.btn-gcal:hover {
     background: #f5f5f5;
-    color: #1a1a1a !important;
+    color: #1a1a1a;
 }
 
 /* ===== 카드 ===== */
@@ -97,8 +111,8 @@ body {
 
 /* ===== 폼 입력 ===== */
 .form-label {
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
     color: #555;
     margin-bottom: 6px;
 }
@@ -106,13 +120,13 @@ body {
 .form-control {
     font-family: 'Noto Sans KR', sans-serif;
     font-size: 14px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #e8e8e8;
     border-radius: 10px !important;
-    padding: 12px 16px;
+    padding: 11px 14px;
     background: #fafafa;
     color: #1a1a1a;
     transition: all 0.15s;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
 }
 
 .form-control:focus {
@@ -149,6 +163,21 @@ textarea.form-control {
 
 .btn-dark:hover {
     background: #333 !important;
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: #6c63ff !important;
+    border: none !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+    padding: 12px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+.btn-primary:hover {
+    background: #5a52e0 !important;
     transform: translateY(-1px);
 }
 
@@ -232,7 +261,6 @@ textarea.form-control {
     padding: 14px 16px !important;
 }
 
-/* 완료된 할 일 */
 .todo-card.done-card {
     border-left-color: #1db97a !important;
     background: #fafafa;
@@ -244,7 +272,6 @@ textarea.form-control {
     color: #bbb !important;
 }
 
-/* 할 일 제목 */
 .todo-card h6 {
     font-size: 15px;
     font-weight: 500;
@@ -252,7 +279,6 @@ textarea.form-control {
     margin-bottom: 5px !important;
 }
 
-/* 할 일 내용 */
 .todo-card p {
     font-size: 13px;
     color: #888;
@@ -293,9 +319,9 @@ h5.mb-3 {
 
 /* ===== 카테고리 필터 카드 ===== */
 .card h6 {
-    font-size: 13px;
-    font-weight: 600;
-    color: #888;
+    font-size: 11px;
+    font-weight: 700;
+    color: #aaa;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 10px !important;
@@ -353,7 +379,21 @@ h5.mb-3 {
     color: #6c63ff;
 }
 
-/* 로그인 하단 텍스트 */
+.login-sub {
+    text-align: center;
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 20px;
+    margin-top: -8px;
+}
+
+.login-wrapper {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .text-center.mb-0 {
     font-size: 13px;
     color: #888;
@@ -370,22 +410,10 @@ h5.mb-3 {
 }
 
 /* ===== 스크롤바 ===== */
-::-webkit-scrollbar {
-    width: 5px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #ddd;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #bbb;
-}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #bbb; }
 
 /* ===== 하단 여백 ===== */
 .container {

@@ -4,44 +4,32 @@
 {% block title %}로그인{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-5">
-        <div class="card shadow-sm">
-            <div class="card-body p-4">
+<div class="login-wrapper">
+    <div style="width: 100%; max-width: 420px;">
+        <div class="card">
+            <div class="card-body">
                 <h3 class="card-title text-center mb-4">
                     <i class="bi bi-lock"></i> 로그인
                 </h3>
+                <p class="login-sub">할 일을 관리해보세요</p>
 
                 <form method="POST" action="/login">
                     <div class="mb-3">
                         <label class="form-label">이메일</label>
-                        <input 
-                            type="email" 
-                            name="email" 
-                            class="form-control" 
-                            placeholder="이메일 입력"
-                            required
-                        >
+                        <input type="email" name="email" class="form-control" placeholder="이메일 입력" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">비밀번호</label>
-                        <input 
-                            type="password" 
-                            name="password" 
-                            class="form-control" 
-                            placeholder="비밀번호 입력"
-                            required
-                        >
+                        <input type="password" name="password" class="form-control" placeholder="비밀번호 입력" required>
                     </div>
-                    <button type="submit" class="btn btn-dark w-100">
+                    <button type="submit" class="btn btn-primary w-100">
                         <i class="bi bi-box-arrow-in-right"></i> 로그인
                     </button>
                 </form>
 
                 <hr>
                 <p class="text-center mb-0">
-                    계정이 없으신가요? 
-                    <a href="/register">회원가입</a>
+                    계정이 없으신가요? <a href="/register">회원가입</a>
                 </p>
             </div>
         </div>
