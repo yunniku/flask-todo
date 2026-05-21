@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block title %}통계{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+
+  <!-- 전체 요약 -->
+  <div class="stats-row mb-4">
+    <div class="stat-card">
+      <div class="stat-num" style="color:#6c63ff">{{ total_todos }}</div>
+      <div class="stat-label">전체 할 일</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:#1db97a">{{ done_todos }}</div>
+      <div class="stat-label">완료</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:#f0a500">{{ total_todos - done_todos }}</div>
+      <div class="stat-label">미완료</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:#D4537E">
+        {{ (done_todos / total_todos * 100)|round|int if total_todos > 0 else 0 }}%
+      </div>
+      <div class="stat-label">전체 달성률</div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- 월별 통계 -->
+    <div class="col-12 col-md-7">
+      <div class="card">
+        <div class="card-body">
+          <div class="dash-card-title mb-4">
+            <i class="bi bi-bar-chart"></i> 월별 완료 통계
+          </div>
+          <div class="chart-wrap">
+            {% for stat in monthly_stats %}
+            <div class="chart-col">
+              <div class="chart-bar-wrap">
+                <div class="chart-bar-total">
+                  <div class="chart-bar-done"
+                    style="height: {{ stat.rate }}%"
+                    title="{{ stat.done }}개 완료 / {{ stat.total }}개">
+                  </div>
+                </div>
+              </div>
+              <div class="chart-label">{{ stat.month }}</div>
+              <div class="chart-rate">{{ stat.rate }}%</div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 카테고리별 통계 -->
+    <div class="col-12 col-md-5">
+      <div class="card">
+        <div class="card-body">
+          <div class="dash-card-title mb-4">
+            <i class="bi bi-pie-chart"></i> 카테고리별 통계
+          </div>
+          {% if cat_stats %}
+            {% for cat in cat_stats %}
+            <div class="cat-stat-item">
+              <div class="cat-stat-header">
+                <span class="cat-stat-name">{{ cat.category }}</span>
+                <span class="cat-stat-count">{{ cat.done }}/{{ cat.total }}</span>
+              </div>
+              <div class="goal-bar">
+                <div class="goal-fill" style="width:{{ cat.rate }}%;
+                  background:
+                  {% if cat.rate >= 80 %}#1db97a
+                  {% elif cat.rate >= 50 %}#6c63ff
+                  {% else %}#f0a500{% endif %}">
+                </div>
+              </div>
+              <div class="cat-stat-rate">{{ cat.rate }}%</div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-small">할 일을 추가하면 통계가 나타나요!</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- 월별 상세 테이블 -->
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="dash-card-title mb-3">
+            <i class="bi bi-table"></i> 월별 상세
+          </div>
+          <div class="table-responsive">
+            <table class="stats-table">
+              <thead>
+                <tr>
+                  <th>월</th>
+                  <th>전체</th>
+                  <th>완료</th>
+                  <th>미완료</th>
+                  <th>달성률</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for stat in monthly_stats %}
+                <tr>
+                  <td>{{ stat.month }}</td>
+                  <td>{{ stat.total }}</td>
+                  <td style="color:#1db97a">{{ stat.done }}</td>
+                  <td style="color:#f0a500">{{ stat.total - stat.done }}</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <div class="goal-bar" style="width:80px">
+                        <div class="goal-fill" style="width:{{ stat.rate }}%"></div>
+                      </div>
+                      <span style="font-size:13px">{{ stat.rate }}%</span>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% block title %}홈{% endblock %}
+
+{% block content %}
+<div class="home-wrap">
+
+  <!-- 인사말 배너 -->
+  <div class="greeting-banner">
+    <div class="greeting-left">
+      <div class="greeting-date">{{ now_date }}</div>
+      <div class="greeting-text">안녕하세요, {{ current_user.username }}님! 👋</div>
+      <div class="greeting-sub">오늘도 하루 잘 보내세요 🌟</div>
+    </div>
+    <div class="greeting-mood">
+      {{ today_diary.mood if today_diary and today_diary.mood else '😊' }}
+    </div>
+  </div>
+
+  <!-- 핵심 숫자 4개 -->
+  <div class="quick-grid">
+    <a href="/todos" class="quick-card">
+      <div class="quick-icon">📝</div>
+      <div class="quick-num" style="color:#6c63ff">{{ ongoing_todos }}</div>
+      <div class="quick-label">오늘 할 일</div>
+    </a>
+    <a href="/goals" class="quick-card">
+      <div class="quick-icon">🎯</div>
+      <div class="quick-num" style="color:#1db97a">{{ daily_rate }}%</div>
+      <div class="quick-label">목표 달성</div>
+    </a>
+    <a href="/anniversary" class="quick-card">
+      <div class="quick-icon">🎂</div>
+      <div class="quick-num" style="color:#D4537E">
+        {% if dday_list %}{{ dday_list[0].dday_str }}{% else %}-{% endif %}
+      </div>
+      <div class="quick-label">다음 기념일</div>
+    </a>
+    <a href="/diary" class="quick-card">
+      <div class="quick-icon">📔</div>
+      <div class="quick-num" style="color:#f0a500">{{ done_todos }}</div>
+      <div class="quick-label">완료한 일</div>
+    </a>
+  </div>
+
+  <!-- 하단 4개 카드 -->
+  <div class="home-grid">
+
+    <!-- 오늘 할 일 -->
+    <div class="home-card">
+      <div class="home-card-header">
+        <div class="home-card-title">📝 오늘 할 일</div>
+        <a href="/todos" class="home-card-more">전체보기 →</a>
+      </div>
+      {% if today_todos %}
+        {% for todo in today_todos[:4] %}
+        <div class="home-todo-item">
+          <a href="/toggle/{{ todo.id }}"
+             class="home-check {% if todo.done %}done{% endif %}">
+            {% if todo.done %}<i class="bi bi-check"></i>{% endif %}
+          </a>
+          <span class="home-todo-text {% if todo.done %}done-text{% endif %}">
+            {{ todo.title }}
+          </span>
+        </div>
+        {% endfor %}
+        {% if today_todos|length > 4 %}
+        <div class="home-more-text">+ {{ today_todos|length - 4 }}개 더 있어요</div>
+        {% endif %}
+      {% else %}
+        <div class="home-empty">
+          오늘 할 일이 없어요 😊
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- D-day -->
+    <div class="home-card">
+      <div class="home-card-header">
+        <div class="home-card-title">🎂 D-day</div>
+        <a href="/anniversary" class="home-card-more">전체보기 →</a>
+      </div>
+      {% if dday_list %}
+        {% for d in dday_list[:4] %}
+        <div class="home-dday-item">
+          <span class="home-dday-name">{{ d.emoji }} {{ d.title }}</span>
+          <span class="home-dday-badge {% if d.dday == 0 %}today{% elif d.dday <= 7 %}soon{% endif %}">
+            {{ d.dday_str }}
+          </span>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="home-empty">
+          기념일을 추가해보세요!
+          <a href="/anniversary" class="home-add-link">추가하기 →</a>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- 목표 달성률 -->
+    <div class="home-card">
+      <div class="home-card-header">
+        <div class="home-card-title">🎯 목표 달성률</div>
+        <a href="/goals" class="home-card-more">전체보기 →</a>
+      </div>
+      <div class="home-goal-row">
+        <div class="home-goal-label">
+          <span>오늘</span>
+          <span style="color:#6c63ff">{{ daily_rate }}%</span>
+        </div>
+        <div class="home-goal-bar">
+          <div class="home-goal-fill" style="width:{{ daily_rate }}%"></div>
+        </div>
+      </div>
+      <div class="home-goal-row">
+        <div class="home-goal-label">
+          <span>이번 주</span>
+          <span style="color:#6c63ff">{{ weekly_rate }}%</span>
+        </div>
+        <div class="home-goal-bar">
+          <div class="home-goal-fill" style="width:{{ weekly_rate }}%"></div>
+        </div>
+      </div>
+      <div class="home-goal-row">
+        <div class="home-goal-label">
+          <span>이번 달</span>
+          <span style="color:#6c63ff">{{ monthly_rate }}%</span>
+        </div>
+        <div class="home-goal-bar">
+          <div class="home-goal-fill" style="width:{{ monthly_rate }}%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 오늘 한 줄 다이어리 -->
+    <div class="home-card">
+      <div class="home-card-header">
+        <div class="home-card-title">📔 오늘 한 줄</div>
+        <a href="/diary" class="home-card-more">다이어리 →</a>
+      </div>
+      {% if today_diary and today_diary.content %}
+        <div class="home-diary-box">
+          {{ today_diary.content[:100] }}
+          {% if today_diary.content|length > 100 %}...{% endif %}
+        </div>
+        {% if today_stickers %}
+        <div class="home-stickers">
+          {% for s in today_stickers %}{{ s }}{% endfor %}
+        </div>
+        {% endif %}
+      {% else %}
+        <div class="home-empty">
+          오늘 하루를 기록해보세요!
+          <a href="/diary" class="home-add-link">기록하기 →</a>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}

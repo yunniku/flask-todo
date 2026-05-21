@@ -29,12 +29,20 @@ def create_app():
     from routes.todos import todos_bp
     from routes.api import api_bp
     from routes.calendar import calendar_bp
+    from routes.goals import goals_bp
+    from routes.anniversary import anniversary_bp
+    from routes.diary import diary_bp
+    from routes.dashboard import dashboard_bp
     
     app.register_blueprint(auth_bp)
     app.register_blueprint(todos_bp)
     app.register_blueprint(api_bp, url_prefix='/api')
     app.register_blueprint(calendar_bp)
-
+    app.register_blueprint(goals_bp)
+    app.register_blueprint(anniversary_bp)
+    app.register_blueprint(diary_bp)
+    app.register_blueprint(dashboard_bp)
+    
     # DB 테이블 생성
     with app.app_context():
         db.create_all()

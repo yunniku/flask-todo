@@ -1,61 +1,116 @@
-<!--모든 페이지의 공통 뼈대-->
-<!-- templates/base.html -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Flask Todo{% endblock %}</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- 아이콘 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- 커스텀 CSS (Bootstrap 다음에 와야 덮어씌워짐!) -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        .todo-card { transition: all 0.2s; }
-        .done-text { text-decoration: line-through; color: #adb5bd; }
-    </style>
 </head>
 <body>
-    <!-- 네비게이션 바 -->
-    <nav class="navbar navbar-expand mb-3">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="/">
+
+    <!-- 데스크탑 네비게이션 -->
+    <nav class="navbar navbar-expand-lg d-none d-lg-flex">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="/dashboard">
                 <i class="bi bi-check2-square"></i> Flask Todo
             </a>
+            <div class="navbar-nav mx-auto">
+                <a class="nav-link {% if request.path == '/dashboard' %}active{% endif %}" href="/dashboard">
+                    <i class="bi bi-grid"></i> 대시보드
+                </a>
+                <a class="nav-link {% if request.path == '/todos' %}active{% endif %}" href="/todos">
+                    <i class="bi bi-list-check"></i> 할 일
+                </a>
+                <a class="nav-link {% if request.path == '/goals' %}active{% endif %}" href="/goals">
+                    <i class="bi bi-trophy"></i> 목표
+                </a>
+                <a class="nav-link {% if request.path == '/anniversary' %}active{% endif %}" href="/anniversary">
+                    <i class="bi bi-balloon-heart"></i> 기념일
+                </a>
+                <a class="nav-link {% if request.path == '/diary' %}active{% endif %}" href="/diary">
+                    <i class="bi bi-journal-richtext"></i> 다이어리
+                </a>
+                <a class="nav-link {% if request.path == '/stats' %}active{% endif %}" href="/stats">
+                    <i class="bi bi-bar-chart"></i> 통계
+                </a>
+            </div>
             <div class="navbar-nav ms-auto">
                 {% if current_user.is_authenticated %}
-                <div class="d-flex align-items-center gap-2">
-                    <div class="user-avatar">{{ current_user.username[0].upper() }}</div>
-                    <span class="navbar-text">{{ current_user.username }}님</span>
-                    <a href="/logout" class="btn-logout">로그아웃</a>
-                </div>
+                <span class="navbar-text me-3">
+                    👋 {{ current_user.username }}님
+                </span>
+                <a class="nav-link" href="/logout">로그아웃</a>
                 {% endif %}
             </div>
         </div>
     </nav>
 
-    <div class="container">
-
-        <!-- 플래시 메시지 (알림) -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        <!-- 각 페이지 내용이 여기 들어옴 -->
-        {% block content %}{% endblock %}
-
+    <!-- 모바일 상단 헤더 -->
+    <div class="mobile-header d-lg-none">
+        <div class="mobile-header-brand">
+            <i class="bi bi-check2-square"></i> Flask Todo
+        </div>
+        {% if current_user.is_authenticated %}
+        <div class="mobile-header-user">
+            👋 {{ current_user.username }}님
+            <a href="/logout" class="mobile-logout">로그아웃</a>
+        </div>
+        {% endif %}
     </div>
 
-    <!-- Bootstrap JS -->
+    <!-- 메인 컨텐츠 -->
+    <div class="main-content">
+        <div class="container-fluid px-3 px-lg-4">
+
+            <!-- 플래시 메시지 -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show mt-3">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- 모바일 하단 네비게이션 -->
+    {% if current_user.is_authenticated %}
+    <nav class="mobile-bottom-nav d-lg-none">
+        <a class="mobile-nav-item {% if request.path == '/dashboard' %}active{% endif %}" href="/dashboard">
+            <i class="bi bi-grid"></i>
+            <span>홈</span>
+        </a>
+        <a class="mobile-nav-item {% if request.path == '/todos' %}active{% endif %}" href="/todos">
+            <i class="bi bi-list-check"></i>
+            <span>할 일</span>
+        </a>
+        <a class="mobile-nav-item {% if request.path == '/goals' %}active{% endif %}" href="/goals">
+            <i class="bi bi-trophy"></i>
+            <span>목표</span>
+        </a>
+        <a class="mobile-nav-item {% if request.path == '/anniversary' %}active{% endif %}" href="/anniversary">
+            <i class="bi bi-balloon-heart"></i>
+            <span>기념일</span>
+        </a>
+        <a class="mobile-nav-item {% if request.path == '/diary' %}active{% endif %}" href="/diary">
+            <i class="bi bi-journal-richtext"></i>
+            <span>다이어리</span>
+        </a>
+        <a class="mobile-nav-item {% if request.path == '/stats' %}active{% endif %}" href="/stats">
+            <i class="bi bi-bar-chart"></i>
+            <span>통계</span>
+        </a>
+    </nav>
+    {% endif %}
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>

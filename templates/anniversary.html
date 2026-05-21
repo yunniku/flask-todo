@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block title %}기념일 & D-day{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+
+  <div class="row g-4">
+
+    <!-- 왼쪽: 기념일 추가 폼 -->
+    <div class="col-12 col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="dash-card-title mb-3">
+            <i class="bi bi-balloon-heart"></i> 기념일 추가
+          </div>
+          <form method="POST" action="/anniversary/add">
+            <div class="mb-3">
+              <label class="form-label">기념일 이름 *</label>
+              <input type="text" name="title" class="form-control"
+                placeholder="예: 생일, 결혼기념일" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">날짜 *</label>
+              <input type="date" name="date" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">이모지</label>
+              <div class="emoji-row">
+                {% for e in ['🎂','🎉','💑','🌸','✈️','🎓','💍','🏠','🐶','🎵'] %}
+                <label class="emoji-label">
+                  <input type="radio" name="emoji" value="{{ e }}"
+                    {% if loop.first %}checked{% endif %} style="display:none">
+                  <span class="emoji-btn">{{ e }}</span>
+                </label>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input type="checkbox" name="repeat_yearly"
+                  class="form-check-input" id="repeat" checked>
+                <label class="form-check-label" for="repeat">
+                  매년 반복
+                </label>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-dark w-100">
+              <i class="bi bi-plus"></i> 추가하기
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 오른쪽: D-day 목록 -->
+    <div class="col-12 col-md-8">
+
+      <!-- D-day 카운트다운 -->
+      {% if dday_list %}
+      <div class="row g-3 mb-4">
+        {% for d in dday_list[:3] %}
+        <div class="col-12 col-sm-4">
+          <div class="dday-big-card">
+            <div class="dday-big-emoji">{{ d.emoji }}</div>
+            <div class="dday-big-title">{{ d.title }}</div>
+            <div class="dday-big-count
+              {% if d.dday == 0 %}today
+              {% elif d.dday <= 7 %}soon{% endif %}">
+              {{ d.dday_str }}
+            </div>
+            <div class="dday-big-date">{{ d.date }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- 전체 기념일 목록 -->
+      <div class="card">
+        <div class="card-body">
+          <div class="dash-card-title mb-3">
+            <i class="bi bi-calendar-heart"></i> 전체 기념일
+          </div>
+          {% if anniversaries %}
+            {% for ann in anniversaries %}
+            <div class="ann-item">
+              <div class="ann-emoji">{{ ann.emoji or '🎉' }}</div>
+              <div class="ann-info">
+                <div class="ann-title">{{ ann.title }}</div>
+                <div class="ann-date">
+                  {{ ann.date.strftime('%Y년 %m월 %d일') }}
+                  {% if ann.repeat_yearly %}
+                  <span class="ann-repeat">매년 반복</span>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="ann-dday">
+                {% for d in dday_list %}
+                  {% if d.id == ann.id %}
+                  <span class="dday-badge">{{ d.dday_str }}</span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <a href="/anniversary/delete/{{ ann.id }}"
+                 onclick="return confirm('삭제할까요?')"
+                 class="ann-delete">
+                <i class="bi bi-trash"></i>
+              </a>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="text-center py-5 text-muted">
+              <i class="bi bi-balloon-heart" style="font-size:3rem;color:#ddd;display:block;margin-bottom:12px"></i>
+              <p>기념일을 추가해보세요! 🎂</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block scripts %}
+<script>
+// 이모지 선택
+document.querySelectorAll('.emoji-label').forEach(label => {
+  label.addEventListener('click', function() {
+    document.querySelectorAll('.emoji-btn').forEach(btn => btn.classList.remove('active'));
+    this.querySelector('.emoji-btn').classList.add('active');
+  });
+});
+</script>
+{% endblock %}
+{% endblock %}

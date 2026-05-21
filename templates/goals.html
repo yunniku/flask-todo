@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% block title %}목표 관리{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+
+  <!-- 목표 추가 폼 -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="dash-card-title mb-3">
+        <i class="bi bi-trophy"></i> 목표 추가
+      </div>
+      <form method="POST" action="/goals/add">
+        <div class="row g-3">
+          <div class="col-12 col-md-4">
+            <input type="text" name="title" class="form-control"
+              placeholder="목표 제목 *" required>
+          </div>
+          <div class="col-12 col-md-3">
+            <input type="text" name="description" class="form-control"
+              placeholder="상세 설명 (선택)">
+          </div>
+          <div class="col-6 col-md-2">
+            <select name="goal_type" class="form-control" required>
+              <option value="">종류 선택</option>
+              <option value="daily">오늘 목표</option>
+              <option value="weekly">주간 목표</option>
+              <option value="monthly">월간 목표</option>
+            </select>
+          </div>
+          <div class="col-6 col-md-2">
+            <input type="date" name="target_date" class="form-control">
+          </div>
+          <div class="col-12 col-md-1">
+            <button type="submit" class="btn btn-dark w-100">
+              <i class="bi bi-plus"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 달성률 요약 -->
+  <div class="stats-row mb-4">
+    <div class="stat-card">
+      <div class="stat-num" style="color:#6c63ff">{{ daily_rate }}%</div>
+      <div class="stat-label">오늘 달성률</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:#1db97a">{{ weekly_rate }}%</div>
+      <div class="stat-label">주간 달성률</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:#f0a500">{{ monthly_rate }}%</div>
+      <div class="stat-label">월간 달성률</div>
+    </div>
+  </div>
+
+  <!-- 목표 목록 -->
+  <div class="row g-4">
+
+    <!-- 오늘 목표 -->
+    <div class="col-12 col-md-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="dash-card-title mb-3">
+            <i class="bi bi-sun"></i> 오늘 목표
+            <span class="goal-count">{{ daily_goals|length }}</span>
+          </div>
+          <div class="goal-bar mb-3">
+            <div class="goal-fill" style="width:{{ daily_rate }}%"></div>
+          </div>
+          {% if daily_goals %}
+            {% for goal in daily_goals %}
+            <div class="goal-item-card {% if goal.achieved %}achieved{% endif %}">
+              <div class="d-flex align-items-start gap-2">
+                <a href="/goals/toggle/{{ goal.id }}" class="goal-check {% if goal.achieved %}done{% endif %}">
+                  {% if goal.achieved %}<i class="bi bi-check"></i>{% endif %}
+                </a>
+                <div class="flex-grow-1">
+                  <div class="goal-title {% if goal.achieved %}done-text{% endif %}">
+                    {{ goal.title }}
+                  </div>
+                  {% if goal.description %}
+                  <div class="goal-desc">{{ goal.description }}</div>
+                  {% endif %}
+                </div>
+                <a href="/goals/delete/{{ goal.id }}"
+                   onclick="return confirm('삭제할까요?')"
+                   class="goal-delete">
+                  <i class="bi bi-x"></i>
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-small">오늘 목표를 추가해보세요! 🎯</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- 주간 목표 -->
+    <div class="col-12 col-md-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="dash-card-title mb-3">
+            <i class="bi bi-calendar-week"></i> 주간 목표
+            <span class="goal-count">{{ weekly_goals|length }}</span>
+          </div>
+          <div class="goal-bar mb-3">
+            <div class="goal-fill" style="width:{{ weekly_rate }}%"></div>
+          </div>
+          {% if weekly_goals %}
+            {% for goal in weekly_goals %}
+            <div class="goal-item-card {% if goal.achieved %}achieved{% endif %}">
+              <div class="d-flex align-items-start gap-2">
+                <a href="/goals/toggle/{{ goal.id }}" class="goal-check {% if goal.achieved %}done{% endif %}">
+                  {% if goal.achieved %}<i class="bi bi-check"></i>{% endif %}
+                </a>
+                <div class="flex-grow-1">
+                  <div class="goal-title {% if goal.achieved %}done-text{% endif %}">
+                    {{ goal.title }}
+                  </div>
+                  {% if goal.description %}
+                  <div class="goal-desc">{{ goal.description }}</div>
+                  {% endif %}
+                </div>
+                <a href="/goals/delete/{{ goal.id }}"
+                   onclick="return confirm('삭제할까요?')"
+                   class="goal-delete">
+                  <i class="bi bi-x"></i>
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-small">주간 목표를 추가해보세요! 📅</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- 월간 목표 -->
+    <div class="col-12 col-md-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="dash-card-title mb-3">
+            <i class="bi bi-calendar-month"></i> 월간 목표
+            <span class="goal-count">{{ monthly_goals|length }}</span>
+          </div>
+          <div class="goal-bar mb-3">
+            <div class="goal-fill" style="width:{{ monthly_rate }}%"></div>
+          </div>
+          {% if monthly_goals %}
+            {% for goal in monthly_goals %}
+            <div class="goal-item-card {% if goal.achieved %}achieved{% endif %}">
+              <div class="d-flex align-items-start gap-2">
+                <a href="/goals/toggle/{{ goal.id }}" class="goal-check {% if goal.achieved %}done{% endif %}">
+                  {% if goal.achieved %}<i class="bi bi-check"></i>{% endif %}
+                </a>
+                <div class="flex-grow-1">
+                  <div class="goal-title {% if goal.achieved %}done-text{% endif %}">
+                    {{ goal.title }}
+                  </div>
+                  {% if goal.description %}
+                  <div class="goal-desc">{{ goal.description }}</div>
+                  {% endif %}
+                </div>
+                <a href="/goals/delete/{{ goal.id }}"
+                   onclick="return confirm('삭제할까요?')"
+                   class="goal-delete">
+                  <i class="bi bi-x"></i>
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-small">월간 목표를 추가해보세요! 🌟</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

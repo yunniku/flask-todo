@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% block title %}다이어리{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+  <div class="row g-4">
+
+    <!-- 왼쪽: 다이어리 작성 -->
+    <div class="col-12 col-md-5">
+      <div class="card">
+        <div class="card-body">
+          <div class="dash-card-title mb-3">
+            <i class="bi bi-journal-richtext"></i> 
+            {{ year }}년 {{ month }}월 오늘 기록
+          </div>
+
+          <form method="POST" action="/diary/save">
+            <input type="hidden" name="date" value="{{ now_date }}">
+
+            <!-- 날짜 선택 -->
+            <div class="mb-3">
+              <label class="form-label">날짜</label>
+              <input type="date" name="date" class="form-control"
+                value="{{ today_diary.date if today_diary else now_date }}">
+            </div>
+
+            <!-- 기분 선택 -->
+            <div class="mb-3">
+              <label class="form-label">오늘 기분</label>
+              <div class="mood-row">
+                {% for mood in ['😊','😢','😴','😤','🥰','😎','🤔','😅'] %}
+                <label class="mood-label">
+                  <input type="radio" name="mood" value="{{ mood }}"
+                    {% if today_diary and today_diary.mood == mood %}checked{% endif %}
+                    style="display:none">
+                  <span class="mood-btn {% if today_diary and today_diary.mood == mood %}active{% endif %}">
+                    {{ mood }}
+                  </span>
+                </label>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- 테마 색상 -->
+            <div class="mb-3">
+              <label class="form-label">테마 색상</label>
+              <div class="theme-row">
+                {% for color, hex, label in [
+                  ('purple','#7F77DD','보라'),
+                  ('pink','#D4537E','핑크'),
+                  ('teal','#1D9E75','초록'),
+                  ('blue','#378ADD','파랑'),
+                  ('amber','#EF9F27','노랑')
+                ] %}
+                <label class="theme-label" title="{{ label }}">
+                  <input type="radio" name="theme_color" value="{{ color }}"
+                    {% if today_diary and today_diary.theme_color == color %}checked
+                    {% elif not today_diary and color == 'purple' %}checked{% endif %}
+                    style="display:none">
+                  <span class="theme-dot-btn {% if today_diary and today_diary.theme_color == color %}active{% elif not today_diary and color == 'purple' %}active{% endif %}"
+                    style="background:{{ hex }}"></span>
+                </label>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- 내용 -->
+            <div class="mb-3">
+              <label class="form-label">오늘 하루</label>
+              <textarea name="content" class="form-control diary-textarea-lg"
+                placeholder="오늘 하루를 자유롭게 기록해보세요...">{{ today_diary.content if today_diary else '' }}</textarea>
+            </div>
+
+            <!-- 스티커 -->
+            <div class="mb-3">
+              <label class="form-label">스티커</label>
+              <div class="sticker-row">
+                {% for s in ['⭐','🌸','🎵','💫','🌈','🍀','🎨','🌙','🔥','💪','📚','🎯'] %}
+                <label class="sticker-label">
+                  <input type="checkbox" name="stickers" value="{{ s }}"
+                    {% if today_diary and today_diary.stickers and s in today_diary.stickers %}checked{% endif %}
+                    style="display:none">
+                  <span class="sticker {% if today_diary and today_diary.stickers and s in today_diary.stickers %}active{% endif %}">
+                    {{ s }}
+                  </span>
+                </label>
+                {% endfor %}
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-dark w-100">
+              <i class="bi bi-save"></i> 저장하기
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 오른쪽: 다이어리 목록 -->
+    <div class="col-12 col-md-7">
+
+      <!-- 월 이동 -->
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h5 class="mb-0">{{ year }}년 {{ month }}월 기록</h5>
+        <div class="cal-nav">
+          <a href="/diary?year={{ year if month > 1 else year-1 }}&month={{ month-1 if month > 1 else 12 }}"
+             class="cal-nav-btn"><i class="bi bi-chevron-left"></i></a>
+          <a href="/diary?year={{ year if month < 12 else year+1 }}&month={{ month+1 if month < 12 else 1 }}"
+             class="cal-nav-btn"><i class="bi bi-chevron-right"></i></a>
+        </div>
+      </div>
+
+      {% if diaries %}
+        {% for diary in diaries %}
+        <div class="diary-card" style="border-left-color:
+          {% if diary.theme_color == 'purple' %}#7F77DD
+          {% elif diary.theme_color == 'pink' %}#D4537E
+          {% elif diary.theme_color == 'teal' %}#1D9E75
+          {% elif diary.theme_color == 'blue' %}#378ADD
+          {% elif diary.theme_color == 'amber' %}#EF9F27
+          {% else %}#7F77DD{% endif %}">
+          <div class="diary-card-header">
+            <div class="diary-date">
+              {{ diary.date.strftime('%m월 %d일') }}
+              {% if diary.mood %}
+              <span class="diary-mood">{{ diary.mood }}</span>
+              {% endif %}
+            </div>
+            <div class="d-flex gap-2">
+              <a href="/diary/{{ diary.date }}" class="diary-btn">
+                <i class="bi bi-eye"></i>
+              </a>
+              <a href="/diary/delete/{{ diary.id }}"
+                 onclick="return confirm('삭제할까요?')"
+                 class="diary-btn danger">
+                <i class="bi bi-trash"></i>
+              </a>
+            </div>
+          </div>
+          {% if diary.content %}
+          <div class="diary-preview">
+            {{ diary.content[:80] }}{% if diary.content|length > 80 %}...{% endif %}
+          </div>
+          {% endif %}
+          {% if diary.stickers %}
+          <div class="diary-stickers">
+            {% for s in diary.stickers|replace('[','')
+              |replace(']','')
+              |replace('"','')
+              |replace(' ','')
+              |split(',') %}
+            {{ s }}
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="text-center py-5 text-muted">
+          <i class="bi bi-journal" style="font-size:3rem;color:#ddd;display:block;margin-bottom:12px"></i>
+          <p>이번 달 기록이 없어요.<br>오늘 하루를 기록해보세요! 📔</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// 기분 선택
+document.querySelectorAll('.mood-label').forEach(label => {
+  label.addEventListener('click', function() {
+    document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+    this.querySelector('.mood-btn').classList.add('active');
+  });
+});
+
+// 테마 선택
+document.querySelectorAll('.theme-label').forEach(label => {
+  label.addEventListener('click', function() {
+    document.querySelectorAll('.theme-dot-btn').forEach(b => b.classList.remove('active'));
+    this.querySelector('.theme-dot-btn').classList.add('active');
+  });
+});
+
+// 스티커 선택
+document.querySelectorAll('.sticker-label').forEach(label => {
+  label.addEventListener('click', function() {
+    const checkbox = this.querySelector('input');
+    const sticker = this.querySelector('.sticker');
+    checkbox.checked = !checkbox.checked;
+    sticker.classList.toggle('active', checkbox.checked);
+  });
+});
+</script>
+{% endblock %}

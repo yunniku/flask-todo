@@ -15,7 +15,7 @@ from flask import session
 todos_bp = Blueprint('todos', __name__)
 
 # 📋 메인 페이지 - 할 일 목록
-@todos_bp.route('/')
+@todos_bp.route('/todos')
 @login_required
 def index():
     category = request.args.get('category')  # 카테고리 필터
