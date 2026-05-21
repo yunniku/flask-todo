@@ -1,0 +1,67 @@
+<!-- templates/edit.html -->
+{% extends 'base.html' %}
+
+{% block title %}할 일 수정{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h4 class="card-title mb-4">
+                    <i class="bi bi-pencil-square"></i> 할 일 수정
+                </h4>
+
+                <form method="POST" action="/edit/{{ todo.id }}">
+                    <div class="mb-3">
+                        <label class="form-label">제목 *</label>
+                        <input 
+                            type="text" 
+                            name="title" 
+                            class="form-control" 
+                            value="{{ todo.title }}"
+                            required
+                        >
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">상세 내용</label>
+                        <textarea 
+                            name="content" 
+                            class="form-control" 
+                            rows="3"
+                        >{{ todo.content or '' }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">카테고리</label>
+                        <input 
+                            type="text" 
+                            name="category" 
+                            class="form-control"
+                            value="{{ todo.category or '' }}"
+                            placeholder="예: 공부, 운동, 업무"
+                        >
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">마감일</label>
+                        <input 
+                            type="date" 
+                            name="due_date" 
+                            class="form-control"
+                            value="{{ todo.due_date or '' }}"
+                        >
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-dark flex-grow-1">
+                            <i class="bi bi-check-lg"></i> 수정 완료
+                        </button>
+                        <a href="/" class="btn btn-outline-secondary flex-grow-1">
+                            <i class="bi bi-x-lg"></i> 취소
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

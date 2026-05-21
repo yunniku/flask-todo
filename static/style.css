@@ -1,0 +1,393 @@
+/* static/style.css */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+/* ===== 기본 설정 ===== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f5f5f0;
+    color: #1a1a1a;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* ===== 네비게이션 ===== */
+.navbar {
+    background: var(--bs-body-bg);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding: 0 !important;
+    height: 56px;
+}
+
+.navbar-brand {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--bs-body-color) !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.navbar-brand i {
+    color: #6c63ff;
+    font-size: 18px;
+}
+
+/* 유저 아바타 */
+.user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #EEEDFE;
+    color: #3C3489;
+    font-size: 11px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-text {
+    font-size: 13px;
+    color: var(--bs-secondary-color) !important;
+}
+
+.btn-logout {
+    font-size: 13px;
+    color: var(--bs-secondary-color);
+    background: transparent;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 8px;
+    padding: 4px 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nav-link {
+    font-size: 13px !important;
+    color: #555 !important;
+    padding: 6px 14px !important;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.15s;
+}
+
+.nav-link:hover {
+    background: #f5f5f5;
+    color: #1a1a1a !important;
+}
+
+/* ===== 카드 ===== */
+.card {
+    border: 1px solid #ebebeb !important;
+    border-radius: 16px !important;
+    background: #ffffff;
+    box-shadow: none !important;
+}
+
+.card-body {
+    padding: 22px !important;
+}
+
+/* ===== 폼 입력 ===== */
+.form-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.form-control {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px !important;
+    padding: 12px 16px;
+    background: #fafafa;
+    color: #1a1a1a;
+    transition: all 0.15s;
+    margin-bottom: 4px;
+}
+
+.form-control:focus {
+    border-color: #6c63ff;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.08) !important;
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: #bbb;
+    font-size: 13px;
+}
+
+textarea.form-control {
+    resize: none;
+}
+
+/* ===== 버튼 ===== */
+.btn {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 10px !important;
+    padding: 9px 18px;
+    transition: all 0.15s;
+}
+
+.btn-dark {
+    background: #1a1a1a !important;
+    border: none !important;
+    color: #ffffff !important;
+}
+
+.btn-dark:hover {
+    background: #333 !important;
+    transform: translateY(-1px);
+}
+
+.btn-outline-dark {
+    border: 1px solid #ddd !important;
+    color: #555 !important;
+    background: transparent !important;
+    font-size: 12px !important;
+    padding: 4px 14px !important;
+    border-radius: 20px !important;
+}
+
+.btn-outline-dark:hover,
+.btn-outline-dark.active {
+    background: #1a1a1a !important;
+    color: #ffffff !important;
+    border-color: #1a1a1a !important;
+}
+
+.btn-outline-success {
+    border: 1px solid #ddd !important;
+    color: #aaa !important;
+    background: transparent !important;
+    border-radius: 8px !important;
+    padding: 4px 8px !important;
+}
+
+.btn-success {
+    background: #1db97a !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 4px 8px !important;
+}
+
+.btn-outline-primary {
+    border: 1px solid #ddd !important;
+    color: #aaa !important;
+    background: transparent !important;
+    border-radius: 8px !important;
+    padding: 4px 8px !important;
+}
+
+.btn-outline-primary:hover {
+    background: #f0efff !important;
+    color: #6c63ff !important;
+    border-color: #6c63ff !important;
+}
+
+.btn-outline-danger {
+    border: 1px solid #ddd !important;
+    color: #aaa !important;
+    background: transparent !important;
+    border-radius: 8px !important;
+    padding: 4px 8px !important;
+}
+
+.btn-outline-danger:hover {
+    background: #fff0f0 !important;
+    color: #e53e3e !important;
+    border-color: #e53e3e !important;
+}
+
+/* ===== 할 일 카드 ===== */
+.todo-card {
+    border: 1px solid #ebebeb !important;
+    border-radius: 12px !important;
+    border-left: 3px solid #6c63ff !important;
+    background: #ffffff;
+    transition: all 0.15s;
+    box-shadow: none !important;
+}
+
+.todo-card:hover {
+    border-color: #d0d0d0 !important;
+    border-left-color: #6c63ff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
+}
+
+.todo-card .card-body {
+    padding: 14px 16px !important;
+}
+
+/* 완료된 할 일 */
+.todo-card.done-card {
+    border-left-color: #1db97a !important;
+    background: #fafafa;
+    opacity: 0.75;
+}
+
+.done-text {
+    text-decoration: line-through !important;
+    color: #bbb !important;
+}
+
+/* 할 일 제목 */
+.todo-card h6 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 5px !important;
+}
+
+/* 할 일 내용 */
+.todo-card p {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 6px !important;
+}
+
+/* ===== 배지 ===== */
+.badge {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    padding: 3px 9px !important;
+    border-radius: 20px !important;
+}
+
+.bg-secondary {
+    background: #f0efff !important;
+    color: #5c54d4 !important;
+}
+
+.bg-warning {
+    background: #fff8ec !important;
+    color: #b07d20 !important;
+}
+
+.bg-success {
+    background: #edfff6 !important;
+    color: #1a9e60 !important;
+}
+
+/* ===== 섹션 제목 ===== */
+h5.mb-3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: -0.3px;
+}
+
+/* ===== 카테고리 필터 카드 ===== */
+.card h6 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px !important;
+}
+
+/* ===== 알림 메시지 ===== */
+.alert {
+    font-size: 14px;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 12px 18px;
+}
+
+.alert-success {
+    background: #edfff6;
+    color: #1a7a4a;
+}
+
+.alert-danger {
+    background: #fff0f0;
+    color: #c0392b;
+}
+
+.alert-info {
+    background: #f0efff;
+    color: #4a42c0;
+}
+
+/* ===== 빈 상태 ===== */
+.text-center.py-5 {
+    padding: 60px 0 !important;
+}
+
+.text-center.py-5 i {
+    font-size: 3rem;
+    color: #ddd;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.text-center.py-5 p {
+    font-size: 15px;
+    color: #bbb;
+}
+
+/* ===== 로그인/회원가입 ===== */
+.card-title {
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    color: #1a1a1a !important;
+    letter-spacing: -0.5px;
+}
+
+.card-title i {
+    color: #6c63ff;
+}
+
+/* 로그인 하단 텍스트 */
+.text-center.mb-0 {
+    font-size: 13px;
+    color: #888;
+}
+
+.text-center.mb-0 a {
+    color: #6c63ff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.text-center.mb-0 a:hover {
+    text-decoration: underline;
+}
+
+/* ===== 스크롤바 ===== */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #bbb;
+}
+
+/* ===== 하단 여백 ===== */
+.container {
+    padding-bottom: 60px;
+}
