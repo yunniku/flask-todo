@@ -6,3 +6,5 @@ instance/
 .env
 credentials.json
 .vscode/
+todo.db
+node_modules/
