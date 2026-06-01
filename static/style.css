@@ -25,6 +25,7 @@ body {
     background: #ffffff !important;
     border-bottom: 1px solid #ebebeb;
     padding: 12px 0 !important;
+    position: relative;  /* ← 추가 */
 }
 
 .navbar-brand {
@@ -49,13 +50,19 @@ body {
 .navbar .nav-link {
     font-size: 14px !important;
     color: #888 !important;
-    padding: 6px 14px !important;
+    padding: 6px 20px !important;
     border-radius: 8px;
     border: none !important;
     display: flex;
     align-items: center;
     gap: 6px;
     transition: all 0.15s;
+}
+
+.navbar .navbar-nav.mx-auto {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .navbar .nav-link:hover,

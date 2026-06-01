@@ -128,3 +128,5 @@ def dates_api():
         'mood': d.mood,
         'theme_color': d.theme_color
     } for d in diaries])
+    
+    

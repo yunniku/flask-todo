@@ -124,3 +124,4 @@ def rate():
         'total': len(goals),
         'achieved': achieved
     })
+    

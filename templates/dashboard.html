@@ -53,12 +53,14 @@
       </div>
       {% if today_todos %}
         {% for todo in today_todos[:4] %}
-        <div class="home-todo-item">
-          <a href="/toggle/{{ todo.id }}"
-             class="home-check {% if todo.done %}done{% endif %}">
+        <div class="home-todo-item" id="todo-item-{{ todo.id }}">
+          <a
+            href="#"
+            onclick="toggleTodo({{ todo.id }}, this); return false;"
+            class="home-check {% if todo.done %}done{% endif %}">
             {% if todo.done %}<i class="bi bi-check"></i>{% endif %}
           </a>
-          <span class="home-todo-text {% if todo.done %}done-text{% endif %}">
+          <span class="home-todo-text {% if todo.done %}done-text{% endif %}" id="todo-text-{{ todo.id }}">
             {{ todo.title }}
           </span>
         </div>
@@ -157,4 +159,36 @@
 
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function toggleTodo(id, btn) {
+    const textEl = document.getElementById(`todo-text-${id}`)
+    const isDone = btn.classList.contains('done')
+
+    try {
+        const res = await fetch(`/api/todos/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ done: !isDone })
+        })
+        const data = await res.json()
+
+        if (data.success) {
+            if (!isDone) {
+                btn.classList.add('done')
+                btn.innerHTML = '<i class="bi bi-check"></i>'
+                textEl.classList.add('done-text')
+            } else {
+                btn.classList.remove('done')
+                btn.innerHTML = ''
+                textEl.classList.remove('done-text')
+            }
+        }
+    } catch (err) {
+        console.error('토글 실패:', err)
+    }
+}
+</script>
 {% endblock %}

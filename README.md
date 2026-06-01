@@ -178,13 +178,13 @@ flask-todo/
 │   └── vite.config.js
 ├── static/                 # 정적 파일
 │   ├── style.css
-│   └── dist/               # Vue 빌드 결과물
+│   └── dist/               # Vue 빌드 결과물 (npm run build 후 생성)
 ├── templates/              # Jinja2 템플릿 (기존)
 ├── models.py               # DB 모델 (User, Todo, Goal, Diary, Anniversary)
 ├── app.py                  # Flask 앱 팩토리
 ├── config.py               # 설정
 ├── requirements.txt
-└── todo.db                 # SQLite DB
+└── todo.db                 # SQLite DB (자동 생성)
 ```
 
 ---
@@ -227,30 +227,77 @@ flask-todo/
 
 ---
 
-## 🚀 로컬 실행 방법
+## 🚀 설치 방법
+
+### 사전 요구사항
+
+- Python 3.8 이상
+- Node.js 18 이상
+- pip3, npm
+
+### 1. 레포지토리 클론
 
 ```bash
-# 1. 레포지토리 클론
-git clone https://github.com/your-username/flask-todo.git
+git clone https://github.com/yunniku/flask-todo.git
 cd flask-todo
-
-# 2. 가상환경 생성 및 활성화
-python3 -m venv venv
-source venv/bin/activate
-
-# 3. 패키지 설치
-pip3 install -r requirements.txt
-
-# 4. Flask 서버 실행
-python3 -c "from app import create_app; create_app().run(port=5001, debug=True)"
-
-# 5. Vue 개발 서버 실행 (별도 터미널)
-cd vue-app
-npm install
-npm run dev
 ```
 
-브라우저에서 `http://localhost:5173` 접속
+### 2. 가상환경 생성 및 활성화
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Python 패키지 설치
+
+```bash
+pip3 install -r requirements.txt
+```
+
+### 4. Vue 프론트엔드 빌드
+
+```bash
+cd vue-app
+npm install
+npm run build   # → static/dist/ 폴더 생성
+cd ..
+```
+
+### 5. Flask 서버 실행
+
+```bash
+python3 -c "from app import create_app; create_app().run(port=5001, debug=True)"
+```
+
+브라우저에서 `http://localhost:5001` 접속
+
+> **참고** — Vue 개발 서버를 따로 띄우고 싶다면 (Hot Reload 지원):
+> ```bash
+> # 터미널 1: Flask 서버
+> python3 -c "from app import create_app; create_app().run(port=5001, debug=True)"
+>
+> # 터미널 2: Vue 개발 서버
+> cd vue-app && npm run dev
+> # → http://localhost:5173 에서 접속
+> ```
+
+### 6. (선택) Google Calendar 연동
+
+Google Cloud Console에서 OAuth2 자격 증명을 생성한 뒤,
+`credentials.json` 파일을 프로젝트 루트에 배치하면 구글 캘린더 연동 기능을 사용할 수 있습니다.
+
+---
+
+## 📖 사용법
+
+1. **회원가입 → 로그인**
+2. **대시보드**: 오늘의 할 일 요약, D-day, 목표 달성률 한눈에 확인
+3. **할 일**: 카테고리·마감일 설정 후 할 일 추가, 완료 체크
+4. **목표**: 일간 / 주간 / 월간 목표를 설정하고 달성률 확인
+5. **다이어리**: 날짜별로 기분 이모지·스티커·테마 색상을 선택해 작성
+6. **기념일**: 기념일 추가 시 D-day 자동 계산, 매년 반복 설정 가능
+7. **통계**: 월별·카테고리별 완료 현황 그래프 확인
 
 ---
 
@@ -267,10 +314,29 @@ npm run dev
 
 ---
 
+## 🤝 기여 방법
+
+1. 이 레포를 **Fork** 하세요
+2. 새 브랜치를 생성하세요
+   ```bash
+   git checkout -b feature/새기능
+   ```
+3. 변경사항을 커밋하세요
+   ```bash
+   git commit -m "feat: 새 기능 추가"
+   ```
+4. 브랜치에 Push 하세요
+   ```bash
+   git push origin feature/새기능
+   ```
+5. **Pull Request**를 열어주세요
+
+---
+
 ## 👨‍💻 개발자
 
 | 항목 | 내용 |
 |------|------|
 | **개발 기간** | 2026 |
 | **개발 인원** | 1인 개발 |
-| **GitHub** | [링크] |
+| **GitHub** | [yunniku](https://github.com/yunniku) |

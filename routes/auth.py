@@ -1,5 +1,5 @@
 # routes/auth.py
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, jsonify,render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User
@@ -72,3 +72,42 @@ def logout():
     logout_user()
     flash('로그아웃 되었습니다!', 'info')
     return redirect(url_for('auth.login'))
+
+
+
+# 🔑 로그인 API
+@auth_bp.route('/api/login', methods=['POST'])
+def api_login():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user or not check_password_hash(user.password, password):
+        return jsonify({'success': False, 'message': '이메일 또는 비밀번호가 틀렸습니다!'}), 401
+
+    login_user(user)
+    return jsonify({'success': True, 'username': user.username})
+
+
+# 📝 회원가입 API
+@auth_bp.route('/api/register', methods=['POST'])
+def api_register():
+    data = request.get_json()
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+
+    if User.query.filter_by(email=email).first():
+        return jsonify({'success': False, 'message': '이미 사용중인 이메일입니다!'}), 400
+
+    if User.query.filter_by(username=username).first():
+        return jsonify({'success': False, 'message': '이미 사용중인 아이디입니다!'}), 400
+
+    hashed_pw = generate_password_hash(password)
+    new_user = User(username=username, email=email, password=hashed_pw)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({'success': True, 'message': '회원가입 완료! 로그인해주세요 😊'})
