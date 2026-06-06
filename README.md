@@ -35,14 +35,12 @@ Flask REST API + Vue.js SPA 기반 개인 생산성 관리 웹 앱
 ## 2. 기술 스택
 | 분류 | 기술 | 선택 이유 |
 |------|------|-----------|
-| Backend | Python 3, Flask | REST API 설계, 사용자 인증, 외부 API 연동 등 웹 백엔드의 핵심 기능을 직접 구현하기 위해 선택 |
-| Frontend | Vue.js 3, Vue Router, Pinia, Axios, Vite | SPA 구조를 구축하여 페이지 새로고침 없이 동작하는 사용자 경험을 구현하기 위해 선택. Pinia를 활용해 로그인 상태를 전역으로 관리 |
-| Database | SQLite, SQLAlchemy ORM | 개인 프로젝트 규모에 적합한 경량 데이터베이스. SQLAlchemy ORM을 활용하여 Python 객체 중심으로 데이터 모델링 및 CRUD 기능 구현 |
-| 인증 | Flask-Login, Werkzeug | 세션 기반 로그인 관리와 비밀번호 해시화를 통해 기본적인 인증 및 보안 기능 구현 |
-| 외부 연동 | Google Calendar API (OAuth2 PKCE) | Todo와 일정 관리를 하나의 흐름으로 통합하기 위해 연동. 일정 이중 입력을 줄이고 자동 등록 기능 구현 |
-| 배포 | PythonAnywhere | Flask 백엔드와 Vue 빌드 결과물을 하나의 서버에서 운영하며 실제 서비스 배포 경험 확보 |
-
-본 프로젝트에서는 단순 CRUD 기능 구현에 그치지 않고, REST API 설계, 인증 처리, 사용자 데이터 관리, 외부 API 연동, SPA 아키텍처 전환 과정에서 발생한 문제를 해결하는 데 중점을 두었습니다.
+| Backend | Flask | REST API 설계 및 핵심 백엔드 기능 구현 |
+| Frontend | Vue.js 3, Vue Router, Pinia, Axios, Vite | SPA 구조 기반 UI 및 상태 관리 구현 |
+| Database | SQLite, SQLAlchemy ORM | 경량 DB 기반 CRUD 및 객체 중심 데이터 모델링 |
+| Auth | Flask-Login, Werkzeug | 세션 기반 인증 및 비밀번호 암호화 처리 |
+| External API | Google Calendar API (OAuth2 PKCE) | 일정 관리 자동화 및 외부 캘린더 연동 |
+| Deploy | PythonAnywhere | 통합 배포 및 서비스 운영 경험 |
 
 ---
 
@@ -184,12 +182,26 @@ Calendar API 호출
 Google Calendar 일정 자동 생성
 
 ---
+## 6. 배포 구조
+git push → PythonAnywhere 배포
+├── Frontend: Vue.js build 결과 (정적 파일)
+├── Backend: Flask REST API 실행
+├── Database: SQLite
+└── External API: Google Calendar API 연동 유지
 
-## 6. AI 활용 내역
-본 프로젝트는 AI(Claude, ChatGPT)를 개발 보조 도구로 활용했으며, 최종 설계와 구현은 직접 수행했습니다.
+로컬 환경(개발) - Flask와 Vue를 분리하여 실행
+배포 환경 - 빌드된 Vue 파일을 Flask와 함께 서빙하도록 구성
+SPA 구조를 유지&단일 서버 기반으로 배포 및 운영 가능하도록 설계
+
+OAuth2 인증 및 Google Calendar API 연동은 배포 환경에서도 동일하게 동작하도록 환경 변수 기반으로 관리했습니다.
+
+---
+
+## 7. AI 활용 내역
+본 프로젝트는 AI(Claude, ChatGPT)를 개발 보조 도구로 사용
+문제 원인 분석, 코드 리뷰, 학습 보조 용도로 AI를 활용했으며 최종 설계, 구현, 디버깅은 직접 수행했습니다.
 
 ### 직접 설계 및 구현
-
 - Vue.js SPA + Flask REST API 아키텍처 설계
 - Pinia 기반 전역 인증 상태 관리 흐름 구현
 - Vue Router 인증 가드 로직 구현
@@ -206,11 +218,5 @@ Google Calendar 일정 자동 생성
 - OAuth2 토큰 갱신 로직 코드 리뷰
 - 리팩토링 아이디어 검토
 - README 초안 작성 및 문서 구조 개선
-
-### AI 활용 원칙
-
-AI가 제안한 코드와 설계를 그대로 적용하지 않고, 공식 문서와 직접 테스트를 통해 검증한 후 프로젝트에 반영했습니다.
-
-문제 원인 분석, 코드 리뷰, 학습 보조 용도로 AI를 활용했으며 최종 구현과 디버깅은 직접 수행했습니다.
 
 ---
