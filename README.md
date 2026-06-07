@@ -1,4 +1,4 @@
-# Flask Todo
+# Easy Scheduler
 
 Flask REST API + Vue.js SPA 기반 개인 생산성 관리 웹 앱
 
