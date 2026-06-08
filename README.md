@@ -1,4 +1,4 @@
-# Easy Scheduler
+# Flow Nest
 
 Flask REST API + Vue.js SPA 기반 개인 생산성 관리 웹 앱
 
