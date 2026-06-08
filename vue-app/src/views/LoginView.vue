@@ -12,7 +12,7 @@
               <input
                 type="email"
                 class="form-control"
-                placeholder="이메일"
+                placeholder="test1234@test.com"
                 v-model="form.email"
               >
             </div>
@@ -20,7 +20,7 @@
               <input
                 type="password"
                 class="form-control"
-                placeholder="비밀번호"
+                placeholder="test1234"
                 v-model="form.password"
                 @keyup.enter="handleLogin"
               >
@@ -67,3 +67,10 @@ async function handleLogin() {
   }
 }
 </script>
+
+<style scoped>
+.form-control::placeholder {
+  color: #BBBBBB;
+  font-size: 0.875rem;
+}
+</style>
